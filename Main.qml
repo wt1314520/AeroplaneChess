@@ -1,29 +1,14 @@
-import QtQuick
-import QtQuick.Controls
+import QtQuick.Window
 
-ApplicationWindow {
-    width: 640
-    height: 480
+Window {
+    width: 600
+    height: 600
+    title: "飞行棋"
     visible: true
-    title: qsTr("hello, world")
-    menuBar: MenuBar {
-        Menu {
-            title: qsTr("File")
-            MenuItem {
-                text: qsTr("&Open")
-                onTriggered: console.log("Open action triggered");
-            }
-            MenuItem {
-                text: qsTr("Exit")
-                onTriggered: Qt.quit();
-            }
-        }
-    }
 
-    //Content Area
-    TextArea {
-        text: qsTr("hello, world")
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+    Text {
+        anchors.centerIn: parent
+        text: "第一个QML窗口，运行成功！"
+        font.pixelSize: 24
     }
 }

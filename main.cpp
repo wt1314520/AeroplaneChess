@@ -1,18 +1,19 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include "flightlogic.h"
+#include "player.h"
+
+using namespace Qt::StringLiterals;
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    QQmlApplicationEngine engine;
-    QObject::connect(
-        &engine,
-        &QQmlApplicationEngine::objectCreationFailed,
-        &app,
-        []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
-    engine.loadFromModule("AeroplaneChess", "Main");
+    qmlRegisterType<FlightLogic>("FlightLogic", 1, 0, "FlightLogic");
+    qmlRegisterType<Player>("FlightLogic", 1, 0, "Player");
 
-    return QGuiApplication::exec();
+    QQmlApplicationEngine engine;
+    engine.load(u"qrc:/FlightChess/qml/main.qml"_s);
+
+    return app.exec();
 }
