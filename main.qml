@@ -150,6 +150,45 @@ Window {
                 }
             }
         }
+        // 玩家状态
+               Row {
+                   anchors.horizontalCenter: parent.horizontalCenter
+                   spacing: 30
+
+                   Repeater {
+                       model: 4
+
+                       Column {
+                           spacing: 2
+                           Rectangle {
+                               width: 60
+                               height: 20
+                               color: playerColors[index]
+                               radius: 3
+                           }
+                           Text {
+                               text: "位置: " + gameEngine.getPlayerPosition(index) +
+                                     (gameEngine.getPlayerFinished(index) ? " DUI" : "")
+                               font.pixelSize: 12
+                           }
+                           Text {
+                               text: gameEngine.getPlayerRank(index) > 0 ? "排名: " + gameEngine.getPlayerRank(index) : ""
+                               font.pixelSize: 12
+                               color: "green"
+                           }
+                       }
+                   }
+               }
+               // 消息
+               Text {
+                   anchors.horizontalCenter: parent.horizontalCenter
+                   text: gameEngine.message || "点击掷骰子开始游戏"
+                   font.pixelSize: 14
+                   color: "gray"
+                   wrapMode: Text.WordWrap
+                   maximumLineCount: 2
+                   horizontalAlignment: Text.AlignHCenter
+               }
 
     }
 }
