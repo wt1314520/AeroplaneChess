@@ -3,17 +3,19 @@
 // Created: taowang      2026-06-22 11:48:32
 // Description:
 //
+#pragma once
+
 #include <QObject>
 #include <QVector>
 #include <QRandomGenerator>
-
+#include<QtQml/qqmlregistration.h>
 class GameEngine : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int currentPlayer READ currentPlayer NOTIFY currentPlayerChanged)
     Q_PROPERTY(int diceValue READ diceValue NOTIFY diceValueChanged)
     Q_PROPERTY(bool gameOver READ gameOver NOTIFY gameOverChanged)
-
+    QML_ELEMENT
 public:
     explicit GameEngine(QObject *parent = nullptr);
 

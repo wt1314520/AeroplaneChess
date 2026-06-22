@@ -1,8 +1,3 @@
-// Module
-// File: main.qml   Version: 0.1.0   License: AGPLv3
-// Created: hejiahuan      2026-06-22 14:42:47
-// Description:
-//
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
@@ -10,7 +5,7 @@ import QtQuick.Window
 Window {
     width: 700
     height: 800
-    title: "飞行棋"
+    title: "飞行棋 - 无图片版"
     visible: true
 
     property var playerColors: ["red", "blue", "green", "yellow"]
@@ -23,7 +18,7 @@ Window {
         // 标题
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "✈️ 飞行棋"
+            text: "✈ 飞行棋"
             font.pixelSize: 32
             font.bold: true
         }
@@ -114,6 +109,7 @@ Window {
                         }
                         border.color: "#b8956a"
                         border.width: 1
+
                         // 显示棋子
                         Item {
                             anchors.fill: parent
@@ -123,8 +119,7 @@ Window {
                             }
 
                             function getGridPosition(gridIdx) {
-                                // 将棋盘格子索引映射到玩家位置
-                                // 简化：直接使用gridIdx作为位置
+
                                 for (var p = 0; p < 4; p++) {
                                     if (gameEngine.getPlayerPosition(p) === gridIdx && !gameEngine.getPlayerFinished(p)) {
                                         return p
@@ -156,45 +151,5 @@ Window {
             }
         }
 
-        // 玩家状态
-        Row {
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 30
-
-            Repeater {
-                model: 4
-
-                Column {
-                    spacing: 2
-                    Rectangle {
-                        width: 60
-                        height: 20
-                        color: playerColors[index]
-                        radius: 3
-                    }
-                    Text {
-                        text: "位置: " + gameEngine.getPlayerPosition(index) +
-                              (gameEngine.getPlayerFinished(index) ? " DUI" : "")
-                        font.pixelSize: 12
-                    }
-                    Text {
-                        text: gameEngine.getPlayerRank(index) > 0 ? "排名: " + gameEngine.getPlayerRank(index) : ""
-                        font.pixelSize: 12
-                        color: "green"
-                    }
-                }
-            }
-        }
-
-        // 消息
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: gameEngine.message || "点击掷骰子开始游戏"
-            font.pixelSize: 14
-            color: "gray"
-            wrapMode: Text.WordWrap
-            maximumLineCount: 2
-            horizontalAlignment: Text.AlignHCenter
-        }
     }
 }

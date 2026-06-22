@@ -15,7 +15,7 @@ qt_add_qml_module(appAeroplaneChess
     URI AeroplaneChess
     VERSION 1.0
     SOURCES     main.cpp
-    QML_FILES   Main.qml
+    QML_FILES   main.qml
     SOURCES GameEngine.h
     SOURCES GameEngine.cpp
 )
