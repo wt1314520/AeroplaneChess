@@ -1,3 +1,8 @@
+// Module
+// File: main.cpp   Version: 0.1.0   License: AGPLv3
+// Created:taowang       2026-06-22 11:22:03
+// Description:
+//
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
