@@ -1,19 +1,23 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "flightlogic.h"
-#include "player.h"
-
-using namespace Qt::StringLiterals;
-
+#include <QQmlContext>
+#include "GameEngine.h"
+#include <QString>
 int main(int argc, char *argv[])
 {
+    using namespace Qt::StringLiterals;
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<FlightLogic>("FlightLogic", 1, 0, "FlightLogic");
-    qmlRegisterType<Player>("FlightLogic", 1, 0, "Player");
+    qmlRegisterType<GameEngine>("AeroplaneChess", 1, 0, "GameEngine");
 
     QQmlApplicationEngine engine;
-    engine.load(u"qrc:/FlightChess/qml/main.qml"_s);
+
+    GameEngine gameEngine;
+    engine.rootContext()->setContextProperty("gameEngine", &gameEngine);
+
+    //const QUrl url(u"qrc:/qml/main.qml"_s);
+    const QUrl url("file:shishi2/main.qml");  // 相对路径
+    engine.load(url);
 
     return app.exec();
 }

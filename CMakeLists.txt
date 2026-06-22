@@ -16,10 +16,14 @@ qt_add_qml_module(appAeroplaneChess
     VERSION 1.0
     SOURCES     main.cpp
     QML_FILES   Main.qml
-    SOURCES player.h
-    SOURCES player.cpp
-    SOURCES flightlogic.h
-    SOURCES flightlogic.cpp
+    SOURCES
+    SOURCES
+    SOURCES
+    SOURCES
+    QML_FILES
+    SOURCES
+    SOURCES GameEngine.h
+    SOURCES GameEngine.cpp
 )
 target_compile_features(appAeroplaneChess PRIVATE cxx_std_23)
 target_link_libraries(appAeroplaneChess
