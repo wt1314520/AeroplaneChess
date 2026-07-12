@@ -1,6 +1,6 @@
 // Module
 // File: GameEngine.cpp   Version: 0.1.0   License: AGPLv3
-// Created:taowang       2026-06-23 10:21:09
+// Created:  taowang     2026-07-12 19:30:49
 // Description:
 //
 #include "GameEngine.h"
@@ -194,7 +194,7 @@ void GameEngine::checkGameOver()
     if (m_finishedPlayers >= 4) {
         m_gameOver = true;
         emit gameOverChanged();
-        m_message = " 游戏结束！所有玩家已完成！";
+        m_message = "🎉 游戏结束！所有玩家已完成！";
         emit messageChanged();
     }
 }
