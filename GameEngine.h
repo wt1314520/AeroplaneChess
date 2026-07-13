@@ -1,6 +1,6 @@
 // Module
 // File: GameEngine.h   Version: 0.1.0   License: AGPLv3
-// Created: taowang      2026-07-12 19:29:59
+// Created: taowang      2026-07-12 19:29:59 update hejiahuan 7-13 23:49:32
 // Description:
 //
 #pragma once
@@ -16,6 +16,7 @@ class GameEngine : public QObject
     Q_PROPERTY(int diceValue READ diceValue NOTIFY diceValueChanged)
     Q_PROPERTY(bool gameOver READ gameOver NOTIFY gameOverChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
+
     QML_ELEMENT
 public:
     explicit GameEngine(QObject *parent = nullptr);
@@ -69,3 +70,4 @@ private:
     static constexpr int BASE_POS = -1;
     static constexpr int START_POS[4] = {0, 13, 26, 39};
 };
+
