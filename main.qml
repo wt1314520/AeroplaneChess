@@ -15,7 +15,26 @@ Window {
 
     property var playerColors: ["red", "blue", "green", "yellow"]
     property var playerNames: ["红方", "蓝方", "绿方", "黄方"]
-    property int pieceRadius: 14
+    property var planeImages: [
+        "/root/images/plane_red.png",
+        "/root/images/plane_blue.png",
+        "/root/images/plane_green.png",
+        "/root/images/plane_yellow.png"
+    ]
+    property int pieceSize: 30
+
+    // ========== 坐标映射表（52个格子，索引0~51）==========
+    // 每个元素是 [x, y] 相对于棋盘区域左上角的像素坐标（建议取格子中心点）
+    // 你需要根据你的 board.png 实际测量这些值
+    property var gridPositions: [
+        // 0 ~ 51 依次填入坐标
+        // 这里给出一套示例（适用于常见的 580x580 棋盘，红色起点在右下角，逆时针方向）
+        // 请替换为你的实际坐标！
+        [50, 500], [85, 500], [120, 500], [155, 500], [190, 500], [225, 500], [260, 500], [295, 500], [330, 500], [365, 500], [400, 500], [435, 500], [470, 500], [505, 500],  // 0~13
+        [505, 465], [505, 430], [505, 395], [505, 360], [505, 325], [505, 290], [505, 255], [505, 220], [505, 185], [505, 150], [505, 115], [505, 80], [505, 45],   // 14~26
+        [470, 45], [435, 45], [400, 45], [365, 45], [330, 45], [295, 45], [260, 45], [225, 45], [190, 45], [155, 45], [120, 45], [85, 45], [50, 45],   // 27~39
+        [50, 80], [50, 115], [50, 150], [50, 185], [50, 220], [50, 255], [50, 290], [50, 325], [50, 360], [50, 395], [50, 430], [50, 465]    // 40~51
+    ];
 
     Column {
         anchors.centerIn: parent
@@ -38,7 +57,6 @@ Window {
             border.color: "black"
             border.width: 2
 
-            // TapHandler 处理骰子点击（Input Handler 体系，替代 MouseArea）
             TapHandler {
                 onTapped: {
                     if (!gameEngine.gameOver) {
@@ -75,7 +93,6 @@ Window {
             }
         }
 
-        // 控制按钮（全部改用 Rectangle + TapHandler，不使用 Button/MouseArea）
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 15

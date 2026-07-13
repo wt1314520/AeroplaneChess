@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("gameEngine", &gameEngine);
 
     //const QUrl url(u"qrc:/qml/main.qml"_s);
-    const QUrl url("file:shishi2/main.qml");  // 相对路径
+    const QUrl url("file:AeroplaneChess/main.qml");  // 相对路径
     engine.load(url);
 
     return app.exec();
