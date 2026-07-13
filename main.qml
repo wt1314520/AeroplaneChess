@@ -1,3 +1,8 @@
+// Module
+// File: main.cpp   Version: 0.1.0   License: AGPLv3
+// Created: hejiahuan      2026-07-13 12:13:11
+// Description:
+//
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
@@ -32,6 +37,16 @@ Window {
             color: "white"
             border.color: "black"
             border.width: 2
+
+            // TapHandler 处理骰子点击（Input Handler 体系，替代 MouseArea）
+            TapHandler {
+                onTapped: {
+                    if (!gameEngine.gameOver) {
+                        gameEngine.rollDice()
+                    }
+                }
+            }
+
             TextInput {
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
@@ -60,23 +75,80 @@ Window {
             }
         }
 
-        // 控制按钮
+        // 控制按钮（全部改用 Rectangle + TapHandler，不使用 Button/MouseArea）
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 15
-            Button {
-                text: " 掷骰子"
-                enabled: !gameEngine.gameOver
-                onClicked: gameEngine.rollDice()
+
+            // 掷骰子按钮
+            Rectangle {
+                width: 80
+                height: 36
+                radius: 6
+                color: tapRoll.pressed ? "#d0d0d0" : "#f0f0f0"
+                border.color: "#999"
+                border.width: 1
+
+                TapHandler {
+                    id: tapRoll
+                    onTapped: {
+                        if (!gameEngine.gameOver) {
+                            gameEngine.rollDice()
+                        }
+                    }
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text: " 掷骰子"
+                    font.pixelSize: 14
+                }
             }
-            Button {
-                text: " 移动"
-                enabled: !gameEngine.gameOver && gameEngine.diceValue > 0
-                onClicked: gameEngine.moveCurrentPiece()
+
+            // 移动按钮
+            Rectangle {
+                width: 80
+                height: 36
+                radius: 6
+                color: tapMove.pressed ? "#d0d0d0" : "#f0f0f0"
+                border.color: "#999"
+                border.width: 1
+
+                TapHandler {
+                    id: tapMove
+                    onTapped: {
+                        if (!gameEngine.gameOver && gameEngine.diceValue > 0) {
+                            gameEngine.moveCurrentPiece()
+                        }
+                    }
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text: " 移动"
+                    font.pixelSize: 14
+                }
             }
-            Button {
-                text: "重置"
-                onClicked: gameEngine.resetGame()
+
+            // 重置按钮
+            Rectangle {
+                width: 80
+                height: 36
+                radius: 6
+                color: tapReset.pressed ? "#d0d0d0" : "#f0f0f0"
+                border.color: "#999"
+                border.width: 1
+
+                TapHandler {
+                    id: tapReset
+                    onTapped: gameEngine.resetGame()
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "重置"
+                    font.pixelSize: 14
+                }
             }
         }
 
@@ -119,7 +191,6 @@ Window {
                         // 显示该格子上的所有棋子
                         Item {
                             anchors.fill: parent
-
                             property var piecesHere: []
 
                             function updatePieces() {
@@ -127,7 +198,6 @@ Window {
                                 for (var p = 0; p < 4; ++p) {
                                     for (var i = 0; i < 4; ++i) {
                                         var pos = gameEngine.getPiecePosition(p, i)
-                                        // 位置 0~51 对应格子索引 0~51，终点 52 对应格子 52（也可见）
                                         if (pos === index) {
                                             piecesHere.push({player: p, piece: i})
                                         }
@@ -141,10 +211,12 @@ Window {
                                     parent.updatePieces()
                                 }
                             }
+
                             Component.onCompleted: updatePieces()
 
                             Repeater {
                                 model: parent.piecesHere
+
                                 Rectangle {
                                     width: pieceRadius * 2
                                     height: pieceRadius * 2
@@ -154,6 +226,19 @@ Window {
                                     border.width: 1
                                     x: (model.index % 2) * (width + 2)
                                     y: Math.floor(model.index / 2) * (height + 2)
+
+                                    // TapHandler 处理棋子点击（Input Handler 体系，不使用 MouseArea）
+                                    TapHandler {
+                                        onTapped: {
+                                            console.log("选中棋子: 玩家" + (modelData.player+1) + " 第" + (modelData.piece+1) + "子")
+                                            // 点击当前玩家的棋子可直接移动
+                                            if (!gameEngine.gameOver && gameEngine.diceValue > 0
+                                                && modelData.player === gameEngine.currentPlayer) {
+                                                gameEngine.selectPiece(modelData.player, modelData.piece)
+                                            }
+                                        }
+                                    }
+
                                     Text {
                                         anchors.centerIn: parent
                                         text: (modelData.player+1) + "-" + (modelData.piece+1)
@@ -174,7 +259,6 @@ Window {
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 20
-
             Repeater {
                 model: 4
                 Column {

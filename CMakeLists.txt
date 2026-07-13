@@ -18,6 +18,8 @@ qt_add_qml_module(appAeroplaneChess
     QML_FILES   main.qml
     SOURCES GameEngine.h
     SOURCES GameEngine.cpp
+    RESOURCES ../images/plane_green.png
+    RESOURCES ../images/board.png ../images/plane_red.png ../images/plane_yellow.png ../images/plane_blue.png
 )
 target_compile_features(appAeroplaneChess PRIVATE cxx_std_23)
 target_link_libraries(appAeroplaneChess
