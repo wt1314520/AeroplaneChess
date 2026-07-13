@@ -32,8 +32,10 @@ Window {
             color: "white"
             border.color: "black"
             border.width: 2
-            Text {
-                anchors.centerIn: parent
+            TextInput {
+                anchors.fill: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 text: gameEngine.diceValue > 0 ? gameEngine.diceValue : "?"
                 font.pixelSize: 32
                 font.bold: true
@@ -218,7 +220,7 @@ Window {
                             for (var i=0; i<4; ++i) {
                                 if (!gameEngine.isPieceFinished(index, i)) { allDone = false; break; }
                             }
-                            return allDone ? "✅ 完成" : ""
+                            return allDone ? " 完成" : ""
                         }
                         font.pixelSize: 10
                         color: "green"
