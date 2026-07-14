@@ -116,8 +116,6 @@ Window {
                 font.bold: true
             }
         }
-
-        // 控制按钮（全部改用 Rectangle + TapHandler，不使用 Button/MouseArea）
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 15
@@ -303,7 +301,6 @@ Window {
                             fillMode: Image.PreserveAspectFit
                             visible: status !== Image.Error
 
-                            // Input Handler: TapHandler 处理棋子点击选中（替代 MouseArea）
                             TapHandler {
                                 onTapped: {
                                     console.log("选中棋子: " + playerNames[pieceDelegate.player] + " 第" + (piece+1) + "子")
