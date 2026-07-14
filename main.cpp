@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    qmlRegisterType<GameEngine>("AeroplaneChess", 1, 0, "GameEngine");
+
     QQmlApplicationEngine engine;
 
     GameEngine gameEngine;

@@ -1,6 +1,6 @@
 // Module
 // File: GameEngine.cpp   Version: 0.1.0   License: AGPLv3
-// Created:  taowang     2026-07-12 19:30:49  update hejiahuan 7-12 23:46:16
+// Created:  taowang     2026-07-12 19:30:49  update hejiahuan 7-14 17:46:16
 // Description:
 //
 #include "GameEngine.h"
@@ -19,7 +19,6 @@ void GameEngine::resetGame()
     m_gameOver = false;
     m_finishedPlayers = 0;
     m_rank = QVector<int>(4, -1);
-
     m_pieces.clear();
     m_finished.clear();
     for (int p = 0; p < 4; ++p) {
@@ -28,9 +27,11 @@ void GameEngine::resetGame()
         m_pieces.append(positions);
         m_finished.append(fins);
     }
-
     m_message = "游戏已重置，红方先手";
     emit messageChanged();
+    // 触发棋盘更新
+    m_updateTick++;
+    emit updateTickChanged();
     emit boardUpdated();
     emit currentPlayerChanged();
     emit gameOverChanged();
@@ -43,18 +44,14 @@ void GameEngine::rollDice()
         emit messageChanged();
         return;
     }
-
     m_diceValue = QRandomGenerator::global()->bounded(1, 7);
     emit diceValueChanged();
-
     m_message = QString("玩家 %1 掷出了 %2").arg(m_currentPlayer + 1).arg(m_diceValue);
     emit messageChanged();
-
     // 检查是否有棋子可动，若无可动则提示
     if (!hasAnyMovablePiece(m_currentPlayer, m_diceValue)) {
-        m_message += "，没有棋子可移动，请点击'移动'无效，将自动换人";
+        m_message += "，没有棋子可移动，点击移动将自动换人";
         emit messageChanged();
-        // 这里不自动换人，等用户点击移动时再判断
     }
 }
 
@@ -70,23 +67,25 @@ void GameEngine::moveCurrentPiece()
         emit messageChanged();
         return;
     }
-
     int pieceIdx = findFirstMovablePiece(m_currentPlayer, m_diceValue);
     if (pieceIdx == -1) {
         m_message = "没有棋子可移动，换人";
         emit messageChanged();
+        m_diceValue = 0;
+        emit diceValueChanged();
         nextPlayer();
         return;
     }
-
     movePiece(m_currentPlayer, pieceIdx, m_diceValue);
-
     // 如果掷出6，奖励再掷一次（不换人）
     if (m_diceValue == 6) {
-        m_message += "，掷出6！再掷一次";
+        m_message += "，掷出6！可以再掷一次";
         emit messageChanged();
-        // 不换人，骰子值保留，等待用户再次掷骰
+        m_diceValue = 0;
+        emit diceValueChanged();
     } else {
+        m_diceValue = 0;
+        emit diceValueChanged();
         nextPlayer();
     }
 }
@@ -104,7 +103,6 @@ void GameEngine::movePiece(int player, int pieceIndex, int steps)
             pos = WIN_POS;
             m_finished[player][pieceIndex] = true;
             m_message = QString("玩家 %1 的棋子 %2 到达终点！").arg(player + 1).arg(pieceIndex + 1);
-
             // 检查该玩家是否所有棋子都完成
             bool allFinished = true;
             for (int i = 0; i < PIECES_PER_PLAYER; ++i) {
@@ -140,6 +138,9 @@ void GameEngine::movePiece(int player, int pieceIndex, int steps)
             pos = newPos;
         }
     }
+    // 触发棋盘更新
+    m_updateTick++;
+    emit updateTickChanged();
     emit boardUpdated();
     emit messageChanged();
 }
@@ -191,7 +192,12 @@ void GameEngine::nextPlayer()
 
 void GameEngine::checkGameOver()
 {
-    if (m_finishedPlayers >= 4) {
+    if (m_finishedPlayers >= 3) { // 3个玩家完成就结束，剩下的是第4名
+        for(int i=0; i<4; i++){
+            if(m_rank[i] == -1){
+                m_rank[i] = 4;
+            }
+        }
         m_gameOver = true;
         emit gameOverChanged();
         m_message = "🎉 游戏结束！所有玩家已完成！";
